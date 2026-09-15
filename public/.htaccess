@@ -1,0 +1,26 @@
+# Apache SPA fallback for cPanel / shared hosting.
+#
+# This app is a client-side single-page app (Vite + React Router) with no
+# server component — the exact same static `dist/` build that deploys to
+# Vercel also works on plain Apache hosting (cPanel), as long as Apache is
+# told to serve index.html for any deep link (e.g. /cashier, /kitchen,
+# /order/<table-token>) instead of returning a 404. Vercel already does
+# this via vercel.json; this file does the equivalent for Apache and has
+# no effect at all on the Vercel deployment.
+#
+# Deploy: run `npm run build`, then upload the CONTENTS of the `dist/`
+# folder (including this file) to your domain's public_html (or the
+# subdomain folder for a custom domain).
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Let real files and directories (js/css/images/etc.) be served as-is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else falls back to index.html so React Router can handle it.
+  RewriteRule ^ index.html [L]
+</IfModule>

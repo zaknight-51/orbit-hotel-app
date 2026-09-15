@@ -1,0 +1,183 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Playfair Display', ui-serif, Georgia, serif;
+
+  /* Orbit Blue — buttons, active states, icons, highlights, accents.
+     600 is the core brand blue; the rest of the scale is built around it
+     (lighter tints for badges/hover surfaces, deeper shades for text on
+     light backgrounds and pressed states). Chosen for a modern, premium,
+     "hotel SaaS" feel rather than the logo's literal black/gold, per
+     explicit direction. */
+  --color-primary-50: #0d1b2e;
+  --color-primary-100: #dbe9fb;
+  --color-primary-200: #b3d1f7;
+  --color-primary-300: #82b4f0;
+  --color-primary-400: #5296e8;
+  --color-primary-500: #2f7bdb;
+  --color-primary-600: #2563c9;
+  --color-primary-700: #1e4fa3;
+  --color-primary-800: #1a3f80;
+  --color-primary-900: #16345f;
+  --color-primary-950: #0c1e3d;
+
+  /* Warm gold accent — pulled from the Orbit logo mark, used sparingly as
+     a secondary/premium accent (VIP badges, highlighted totals, star
+     ratings) so the system still visually ties back to the brand mark
+     without becoming a second dominant hue. */
+  --color-accent-50: #201a0c;
+  --color-accent-100: #f5e8c4;
+  --color-accent-200: #ecd28e;
+  --color-accent-300: #e0ba5f;
+  --color-accent-400: #d4a83f;
+  --color-accent-500: #c4952e;
+  --color-accent-600: #c4952e;
+  --color-accent-700: #a17726;
+  --color-accent-800: #7d5c1f;
+  --color-accent-900: #5c4418;
+
+  --color-success-50: #12241a;
+  --color-success-100: #1a3226;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+
+  --color-warning-50: #2a2012;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+
+  --color-error-50: #2a1315;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+
+  /* Dark Charcoal + soft-white neutral scale. This is the same numbered
+     scale as before but inverted in lightness: 50 (was the lightest, used
+     for page backgrounds) is now the darkest charcoal; 900 (was the
+     darkest, used for primary text) is now soft white. Every existing
+     `bg-ink-50` / `text-ink-900` / `border-ink-200` / etc. across the app
+     therefore lands on the correct dark-theme equivalent automatically,
+     with no component changes required. 950 is the one exception — it's
+     only ever used for modal/overlay backdrops (a scrim, not text or a
+     surface), so it stays dark in both themes rather than flipping.
+     Confirmed by an exhaustive audit of every ink-* usage in the codebase
+     before making this change. */
+  --color-ink-50: #12161e;
+  --color-ink-100: #1a1f2a;
+  --color-ink-200: #242b39;
+  --color-ink-300: #333c4e;
+  --color-ink-400: #656f83;
+  --color-ink-500: #8c94a6;
+  --color-ink-600: #adb4c2;
+  --color-ink-700: #ccd1db;
+  --color-ink-800: #e7eaf0;
+  --color-ink-900: #f5f7fa;
+  --color-ink-950: #070a10;
+
+  /* Card/section surface — slightly lighter than the #171717 page
+     background, per the requested "dark charcoal + slightly lighter
+     charcoal for cards" pairing. Every literal `bg-white` used throughout
+     the app for card/section surfaces now points here instead (see the
+     project-wide class rename that accompanied this token change) — kept
+     as its own token rather than redefining Tailwind's built-in `white`,
+     since `text-white`/`border-white` are used elsewhere for light text
+     and borders on dark chrome and must stay actual white for those. */
+  --color-surface: #1b2130;
+  --color-surface-hover: #232a3b;
+
+  /* Slightly more generous corner radii than the original version, for a
+     more modern, premium feel across every card/button/modal that already
+     uses these tokens — no component markup changes needed. */
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  /* Deeper, true-black shadows suit a dark theme far better than the
+     warm-tinted shadows used in the light red/white version. */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 20px -4px rgba(0, 0, 0, 0.45), 0 4px 8px -4px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 24px 32px -8px rgba(0, 0, 0, 0.5), 0 8px 12px -6px rgba(0, 0, 0, 0.35);
+  --shadow-2xl: 0 28px 56px -12px rgba(0, 0, 0, 0.6);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-ink-50);
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2 {
+  letter-spacing: -0.01em;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 201, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 201, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 201, 0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s infinite;
+}
+
+/* Hides the scrollbar on the promotion media carousel while keeping native
+   horizontal scroll/swipe fully functional — used so manual swiping reads
+   as a clean carousel rather than a visible scroll strip. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
